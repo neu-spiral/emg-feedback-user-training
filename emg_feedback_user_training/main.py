@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from loguru import logger
+from plotly.colors import find_intermediate_color
 from plotly.subplots import make_subplots
 from sklearn.metrics import classification_report, confusion_matrix
 from tqdm import tqdm
@@ -506,11 +507,71 @@ def example_modified_probs():
     results_path.mkdir(exist_ok=True, parents=True)
 
     fig = go.Figure()
-    y1 = np.array([0, 0.02, 0.04, 0, 0, 0.14, 0.75, 0, 0.05])
-    y2 = rpm(y1)
-    fig.add_trace(go.Bar(x=GESTURE_NAMES, y=y1, name="Veridical", marker_color="#A0E77D"))
-    fig.add_trace(go.Bar(x=GESTURE_NAMES, y=y2, name="Modified", marker_color="#82B6D9"))
-    fig.add_hline(y=0.5)
+    y1 = np.array([0.02, 0.02, 0.07, 0.02, 0.02, 0.14, 0.64, 0.02, 0.05])
+
+    def get_color(idx, N):
+        return find_intermediate_color(
+            lowcolor="rgb(173, 251, 160)",
+            highcolor="rgb(24, 135, 6)",
+            # highcolor="rgb(42, 155, 24)",
+            intermed=idx / N,
+            colortype="rgb",
+        )
+
+    values = [1.5, 1.25, 1.0, 0.75, 0.5]
+    for idx, m in enumerate(values):
+        if np.allclose(m, 1.0):
+            name = "Veridical (m=1.0)"
+            y2 = y1
+            color = "blue"
+        else:
+            name = f"m={m}"
+            y2 = rpm(y1, m)
+            color = get_color(idx, len(values))
+
+        fig.add_trace(go.Bar(x=GESTURE_NAMES, y=y2, name=name, marker_color=color))
+    fig.add_annotation(
+        x="Left",
+        y=y1[GESTURE_NAMES.index("Left")],
+        ax=50,
+        ay=-50,
+        axref="pixel",
+        ayref="pixel",
+        arrowwidth=3,
+        text="Before",
+        showarrow=True,
+        arrowhead=1,
+    )
+    fig.add_annotation(
+        x="Left",
+        xshift=20,
+        y=rpm(y1, 0.75)[GESTURE_NAMES.index("Left")],
+        ax=50,
+        ay=-50,
+        axref="pixel",
+        ayref="pixel",
+        text="After",
+        arrowwidth=3,
+        showarrow=True,
+        arrowhead=1,
+    )
+
+    fig.add_hline(
+        y=0.5,
+        line_color="black",
+        line_width=2,
+        line_dash="dash",
+        annotation_text="Decision Threshold",
+        annotation_position="top left",
+    )
+    fig.add_hline(
+        y=1 / len(y1),
+        line_color="black",
+        line_width=2,
+        line_dash="dash",
+        annotation_text="Uniform",
+        annotation_position="top left",
+    )
     fig.update_layout(
         yaxis=dict(tickmode="array", tickvals=np.linspace(0, 1, 11), range=[0, 1]),
         margin=dict(l=0, r=10, b=0, t=10),
