@@ -36,27 +36,28 @@ For details on feature extraction, see the paper.
 
 # PDF
 
-To read our paper, see: https://arxiv.org/pdf/2309.07289.pdf
+To read our paper, see: https://ieeexplore.ieee.org/document/10457576
 
 # Citation
 
 If you use this code or dataset, please cite our paper:
 ```bibtex
-@article{bicer2023user,
-    title={User Training with Error Augmentation for Electromyogram-based Gesture Classification},
-    author={
-        Bicer, Yunus and
-        Smedemark-Margulies, Niklas and
-        Celik, Basak and
-        Sunger, Elifnur and
-        Orendorff, Ryan and
-        Naufel, Stephanie and
-        Imbiriba, Tales and
-        Erdogmus, Deniz and
-        Tunik, Eugene and
-        Yarossi, Mathew
+@article{bicer_2024,
+  author={
+    Bicer, Yunus and
+    Smedemark-Margulies, Niklas and
+    Celik, Basak and
+    Sunger, Elifnur and
+    Orendorff, Ryan and
+    Naufel, Stephanie and
+    Imbiriba, Tales and
+    Erdoğmuş, Deniz and
+    Tunik, Eugene and
+    Yarossi, Mathew
     },
-    journal={arXiv preprint arXiv:2309.07289},
-    year={2023}
+  journal={IEEE Transactions on Neural Systems and Rehabilitation Engineering}, 
+  title={User Training With Error Augmentation for sEMG-Based Gesture Classification}, 
+  year={2024},
+  doi={10.1109/TNSRE.2024.3372512}
 }
 ```
